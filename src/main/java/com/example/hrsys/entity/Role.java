@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * @Description 角色信息
  * @Author zhangshenming
@@ -22,4 +24,6 @@ public class Role {
     private String code;
     //分类
     private int sort;
+    //角色下的所有权限
+    private List<Permission> permissions;
 }

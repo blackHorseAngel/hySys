@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * @Description 管理员用户信息表
  * @Author zhangshenming
@@ -20,4 +22,6 @@ public class User {
     private String username;
     //管理员密码
     private String password;
+    //管理员角色
+    private List<Role> roles;
 }
