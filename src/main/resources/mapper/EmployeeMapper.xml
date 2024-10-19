@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hrsys.dao.EmployeeDao">
+  <!--employee结果集-->
+  <!--<resultMap id="EmployeeResultMap" type="com.example.hrsys.entity.Employee">
+    &lt;!&ndash;@Table employee&ndash;&gt;
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="dep_id" jdbcType="INTEGER" property="depId" />
+  </resultMap>-->
+  <resultMap id="EmployeeDeptResultMap" type="com.example.hrsys.entity.Employee">
+  <!--@Table employee-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <association property="dept" javaType="com.example.hrsys.entity.Department">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="name" jdbcType="VARCHAR" property="name" />
+      <result column="number" jdbcType="INTEGER" property="number" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, age, gender, `number`, dep_id
+  </sql>
+  <!--根据id查询员工信息-->
+  <select id="selectById" parameterType="java.lang.Long" resultMap="EmployeeDeptResultMap"
+  resultType="com.example.hrsys.entity.Employee">
+    select
+        emp.id,emp.name,emp.age,emp.gender,emp.number,dep.id as depId,dep.name as depName,dep.number as depNumber
+    from employee as emp
+        inner join department as dep
+            on emp.dep_id = dep.id
+    <where>
+      emp.id = #{id,jdbcType=BIGINT}
+    </where>
+  </select>
+  <!--查询所有员工信息-->
+  <select id="selectAll" resultMap="EmployeeDeptResultMap" resultType="com.example.hrsys.entity.Employee">
+    select
+        emp.id,emp.name,emp.age,emp.gender,emp.number,dep.id as depId,dep.name as depName,dep.number as depNumber
+      from employee as emp
+             inner join department as dep
+                        on emp.dep_id = dep.id
+  </select>
+  <!--根据id删除员工信息-->
+  <delete id="deleteById" parameterType="java.lang.Long">
+    delete from employee
+      <where>
+        id = #{id,jdbcType=BIGINT}
+      </where>
+  </delete>
+  <!--新增员工-->
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.hrsys.entity.Employee" useGeneratedKeys="true">
+    insert into employee
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="number != null">
+        `number`,
+      </if>
+      <if test="dept != null">
+        dep_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="dept != null">
+        #{dept.id,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <!--根据id修改员工信息-->
+  <update id="updateById" parameterType="com.example.hrsys.entity.Employee">
+    update employee
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        `number` = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="dept != null">
+        dep_id = #{dept.id,jdbcType=INTEGER},
+      </if>
+    </set>
+    <where>
+      id = #{id,jdbcType=BIGINT}
+    </where>
+  </update>
+</mapper>

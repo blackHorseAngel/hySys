@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * @Description 部门类
  * @Author zhangshenming
@@ -20,4 +22,6 @@ public class Department {
     private String name;
     //部门编号
     private int number;
+    //部门下的所有员工
+//    List<Employee> employees;
 }
